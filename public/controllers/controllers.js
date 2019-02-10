@@ -14,6 +14,7 @@ var analyticalscores = 0.0;
 var confidentscores = 0.0;
 var tentativescores = 0.0;
 var tonescores = [];
+var barchart;
 
 
 
@@ -120,24 +121,74 @@ app.controller("tone-ctrl", ["$scope", "$http", function ($scope, $http) {
                         }
 
                     }
+                    if(angercount>0){
+                        angerscores = angerscores/angercount;
+                    }
+                    else{
+                        angerscores = 0;
+                    }
 
-                    angerscores = angerscores/angercount;
-                    joyscores = joyscores/joycount;
-                    fearscores = fearscores/fearcount;
-                    analyticalscores = analyticalscores/analyticalcount;
-                    sadnessscores = sadnessscores/sadnesscount;
-                    confidentscores = confidentscores/confidentcount;
-                    tentativescores = tentativescores/tentativecount;
-                    console.log(sadnesscount);
+                    if(joycount>0){
+                        joyscores = joyscores/joycount;
+                    }
+                    else{
+                        joyscores = 0;
+                    }
+
+                    if(fearcount>0){
+                        fearscores = fearscores/fearcount;
+                    }
+                    else{
+                        fearscores = 0;
+                    }
+
+                    if(analyticalcount>0){
+                        analyticalscores = analyticalscores/analyticalcount;
+                    }
+                    else{
+                        analyticalscores = 0;
+
+                    }
+
+                    if(sadnesscount>0){
+                        sadnessscores = sadnessscores/sadnesscount;
+                    }
+                    else{
+                        sadnessscores = 0;
+
+                    }
+
+                    if(confidentcount>0){
+                        confidentscores = confidentscores/confidentcount;
+                    }
+                    else{
+                        confidentscores = 0
+                    }
+
+                    if(tentativecount>0){
+                        tentativescores = tentativescores/tentativecount;
+                    }
+                    else{
+                        tentativescores = 0;
+                    }
+                    
+                    
+                   
+                    
+                    
+                    
+                    
+
+                    
                     tonescores = [angerscores,joyscores,fearscores,analyticalscores,sadnessscores,confidentscores,tentativescores];
-                    console.log(tonescores);
+                    
                     var tonecanvas = document.getElementById('tonecanvas'),
                     ctx3 = tonecanvas.getContext('2d'),
                     newdata = {
                         labels: ["Anger", "Joy", "Fear", "Analytical", "Sadness","Confident","Tentative"],
                         datasets: [
                             {   
-                                fillColor: "rgba(66,66,66,0.5)",
+                                fillColor:"rgba(255,0,0,0.5)",
                                 strokeColor: "#000000",
                                 pointColor: "rgba(0,0,0,1)",
                                 pointStrokeColor: "#fff",
@@ -145,8 +196,10 @@ app.controller("tone-ctrl", ["$scope", "$http", function ($scope, $http) {
                             }
                         ]
                     };
-
-                    var tweetChart = new Chart(ctx3).Bar(newdata, {animationSteps: 50});
+                    if(barchart != undefined){
+                        barchart.destroy();
+                    }
+                    barchart = new Chart(ctx3).Bar(newdata, {animationSteps: 50});
          
 
 
