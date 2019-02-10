@@ -59,7 +59,7 @@ app.get('/results/:query', function (req, res) {
                             if(tone_analysis.length>0)
                             {
                                
-                                analyzed_tones.push(JSON.stringify(tone_analysis));
+                                analyzed_tones.push(tone_analysis);
                                 // console.log("Array Inside");
                                 // console.log(analyzed_tones);
                                 

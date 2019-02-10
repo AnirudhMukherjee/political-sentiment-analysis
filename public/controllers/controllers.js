@@ -16,9 +16,8 @@ var tentativescores = 0.0;
 var tonescores = [];
 var barchart;
 
-
-
 var newarr;
+
 app.controller("main-ctrl", ["$scope", "$http", function ($scope, $http) {
     $scope.title = "Political Sentiment Analysis";
     $scope.newtitle = "Tonal Analysis";
@@ -27,9 +26,54 @@ app.controller("main-ctrl", ["$scope", "$http", function ($scope, $http) {
                 console.log(data);
                var twitterData = data.data;
                twitterData = twitterData.split(/[{}]+/);
+               document.getElementById('sentval').style.visibility ='visible';
+               document.getElementById('favunfav').style.visibility ='visible';
+               document.getElementById('tonalbtn').style.visibility = 'visible';
+               document.getElementById('hide_div').style.visibility = 'visible';
+               document.getElementById('hide_text').style.visibility = 'visible';
+               document.getElementById('hide_text2').style.visibility = 'visible';
+               document.getElementById('regions_div').style.visibility = 'visible';
+
 
                var scores = "{" + twitterData[1] + "}";
                scores = JSON.parse(scores);
+               var posScore = scores["Very Positive"] + scores["Positive"]+ scores["Neutral"];
+              var negScore = scores["Negative"]+ scores["Very Negative"] + scores["Neutral"];
+              var disp1;
+                if(posScore>negScore){
+                   disp1 = true;
+               }
+               else{
+                  disp1 = false;
+               }
+                var per = posScore/(posScore+negScore);
+                var opts = {
+                angle: 0.15, // The span of the gauge arc
+                lineWidth: 0.44, // The line thickness
+                radiusScale: 1, // Relative radius
+                pointer: {
+                    length: 0.6, // // Relative to gauge radius
+                    strokeWidth: 0.035, // The thickness
+                    color: '#000000' // Fill color
+                },
+                limitMax: false,     // If false, max value increases automatically if value > maxValue
+                limitMin: false,     // If true, the min value of the gauge will be fixed
+                colorStart: '#98fb98',   // Colors
+                colorStop: '#40c4ff',    // just experiment with them
+                strokeColor: '#f44336',  // to see which ones work best for you
+                generateGradent: true,
+                highDpiSupport: true,     // High resolution support
+                
+                };
+
+                var target = document.getElementById('ggchart');
+                target.style.visibility = 'visible';     // your canvas element
+                var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
+                gauge.maxValue = 1; // set max gauge value
+                gauge.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+                gauge.animationSpeed = 32; // set animation speed (32 is default value)
+                gauge.set(per);
+                per = per*100.0;
 
                var finalScores = [scores["Very Negative"], scores["Negative"], scores["Neutral"], scores["Positive"], scores["Very Positive"]];
                var canvas = document.getElementById('tweet-chart'),
@@ -38,9 +82,9 @@ app.controller("main-ctrl", ["$scope", "$http", function ($scope, $http) {
                        labels: ["Very Negative", "Negative", "Neutral", "Positive", "Very Positive"],
                        datasets: [
                            {   
-                               fillColor: "rgba(66,66,66,0.5)",
-                               strokeColor: "#000000",
-                               pointColor: "rgba(0,0,0,1)",
+                               fillColor: "rgba(100,181,246,0.75)",
+                               strokeColor: "rgba(25,118,210,1)",
+                               pointColor: "rgba(25,118,210,1)",
                                pointStrokeColor: "#fff",
                                data: finalScores
                            }
@@ -56,18 +100,20 @@ app.controller("main-ctrl", ["$scope", "$http", function ($scope, $http) {
                 labels:["Very Negative", "Negative", "Neutral", "Positive", "Very Positive"],
                 datasets: [{
                     
-                    fillColor: "rgba(66,66,66,0.5)",
-                    strokeColor: "#000000",
-                    pointColor: "rgba(0,0,0,1)",
+                    fillColor: "rgba(100,181,246,0.75)",
+                    strokeColor: "rgba(25,118,210,1)",
+                    pointColor: "rgba(25,118,210,1)",
                     pointStrokeColor: "#fff",
+                    
                     data: finalScores
                 }]
             };
             document.getElementById('radcard').style.visibility='visible';
-               var myRadarChart = new Chart(ctx2).Radar(data,{animationSteps:50});
-
+               var myRadarChart = new Chart(ctx2).Radar(data,{animationSteps:50,borderColor:"#fff"});
+           
                $scope.tweets = JSON.parse(twitterData[0]);
-
+                $scope.percent = per;
+                $scope.disp = disp1;
 
            });
 
@@ -182,33 +228,60 @@ app.controller("tone-ctrl", ["$scope", "$http", function ($scope, $http) {
                     
                     tonescores = [angerscores,joyscores,fearscores,analyticalscores,sadnessscores,confidentscores,tentativescores];
                     
-                    var tonecanvas = document.getElementById('tonecanvas'),
-                    ctx3 = tonecanvas.getContext('2d'),
-                    newdata = {
-                        labels: ["Anger", "Joy", "Fear", "Analytical", "Sadness","Confident","Tentative"],
-                        datasets: [
-                            {   
-                                fillColor:"rgba(255,0,0,0.5)",
-                                strokeColor: "#000000",
-                                pointColor: "rgba(0,0,0,1)",
-                                pointStrokeColor: "#fff",
-                                data: tonescores
-                            }
-                        ]
-                    };
-                    if(barchart != undefined){
-                        barchart.destroy();
-                    }
-                    barchart = new Chart(ctx3).Bar(newdata, {animationSteps: 50});
-         
-
+                   
+                   
+let myChart = document.getElementById('myChart').getContext('2d');
+if(barchart != undefined){
+    barchart.destroy();
+}
+barchart = new Chart(myChart, {
+    type:'horizontalBar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+    data:{
+      labels:["Anger", "Joy", "Fear", "Analytical", "Sadness","Confident","Tentative"],
+      datasets:[{
+        label:'Score',
+        data:tonescores,
+        //backgroundColor:'green',
+        backgroundColor:[
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 159, 64, 0.6)',
+          'rgba(255, 99, 132, 0.6)'
+        ],
+        borderWidth:1,
+        borderColor:'#777',
+        hoverBorderWidth:3,
+        hoverBorderColor:'#000'
+      }]
+    },
+    options:{
+      legend:{
+        display:true,
+        position:'right',
+        labels:{
+          fontColor:'#000'
+        }
+      },
+      layout:{
+        padding:{
+          left:50,
+          right:0,
+          bottom:0,
+          top:0
+        }
+      },
+      tooltips:{
+        enabled:true
+      }
+    }
+  });
 
 
                    
                 }
-                // $scope.chartdata = data;
-
-             
 
            });
 

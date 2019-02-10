@@ -1,8 +1,14 @@
+body,html {
+  background-color:"#00e5ff";
+}
+
 #tag-input {
   font-size: 2em;
 }
 body {
-  background: linear-gradient(270deg, white, white);
+
+  background-color: "#00e5ff";
+  /* background: linear-gradient(270deg, white, white); */
   background-size: 1400% 1400%;
   animation: backgroundDyanimcGenerator 80s ease infinite;
 }
@@ -25,9 +31,11 @@ body {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
+  background-color: "#00e5ff";
 }
 main {
   flex: 1 0 auto;
+  background-color: "#00e5ff";
 }
 .margin-sm-right {
   margin-right: 5%;
@@ -38,3 +46,4 @@ main {
 .card-shadow:hover {
   box-shadow: black 1px 1px 10px;
 }
+

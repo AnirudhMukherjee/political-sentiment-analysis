@@ -1,10 +1,71 @@
 <html ng-app="app" lang="en">
     <head>
         <title>Tone Analysis</title>
-    </head>
+        <script
+            src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-animate.min.js"></script>
+    <script src="app.js"></script>
+    <script src="controllers/controllers.js"></script>
+    <link rel="stylesheet" href="css/styles.css" type="text/css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- <script src="js/charts.min.js"></script>
+    <script src="js/chardin.min.js"></script> -->
+    <script src="js/scripts.min.js"></script>
+    <link rel="stylesheet" href="css/chardin.min.css"/>
+    <script src="js/gauge.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+    <script src="js/scripts.min.js"></script>
+    <link rel="stylesheet" href="css/chardin.min.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+<style>
+   ::placeholder{
+        color: black;
+    }
+    .heading{
+        text-align: center;
+       font-family:  'Roboto', sans-serif;
+    }
+    .main{
+         height: 500px;
+        width: 1000px;
+    }
+    body{
+        text-align: center;
+    }
+    .logo{
+        text-align: left;
+        float: left;
+        font-size: 300%;
+        font-family: 'Roboto', sans-serif;
+        margin-left: 10px;
+    }
+</style>    
+</head>
     <body ng-controller="tone-ctrl">
+            <nav>
+                    
+                    <div class="nav-wrapper">
+                      <a href="#" class="logo"><i class="fa fa-twitter"></i>Sentiment Analysis</a>
+                      <ul id="nav-mobile" class="right hide-on-med-and-down">
+                        <li><a href="index.html"><i class="fa fa-home"></i>&nbsp;Home</a></li>
+                        <li><a href="#"><i class="fa fa-phone"></i>&nbsp;Contact us</a></li>
+                        <li><a href="#"><i class="fa fa-user"></i>&nbsp;About us</a></li>
+                      </ul>
+                    </div>
+                  </nav>
 
-        <h1>{{title}}</h1>
-
+        <h3>{{newtitle}}</h3>
+        <div class="main" style="align-self: center;">
+                <canvas data-intro="See the twitter data visualization here" data-position="left"
+                id="myChart" height="500" width="1000"></canvas>
+        </div> 
     </body>
+
 </html>
