@@ -1,7 +1,26 @@
+var angercount = 0;
+var joycount = 0;
+var fearcount = 0;
+var sadnesscount = 0;
+var analyticalcount = 0;
+var confidentcount = 0;
+var tentativecount = 0;
 
+var angerscores = 0.0;
+var joyscores = 0.0;
+var fearscores = 0.0;
+var sadnessscores = 0.0;
+var analyticalscores = 0.0;
+var confidentscores = 0.0;
+var tentativescores = 0.0;
+var tonescores = [];
+
+
+
+var newarr;
 app.controller("main-ctrl", ["$scope", "$http", function ($scope, $http) {
     $scope.title = "Political Sentiment Analysis";
-
+    $scope.newtitle = "Tonal Analysis";
        $scope.getResponse = function () {
            $http.get("/results/" + $scope.searchInput).then(function (data) {
                 console.log(data);
@@ -51,22 +70,105 @@ app.controller("main-ctrl", ["$scope", "$http", function ($scope, $http) {
 
            });
 
-        // $http.get("/tone").then(function(data){
-        //     var tonedata = data.data;
-        //     console.log(tonedata);
-           
-        // });
+     
        };
 }]);
 
 app.controller("tone-ctrl", ["$scope", "$http", function ($scope, $http) {
+    $scope.title = "Political Sentiment Analysis";
     $scope.newtitle = "Tonal Analysis";
+    
+           $http.get("/tone").then(function (data) {
+                newarr = data.data;
+                console.log(data.data.length);
+                for(i=0;i<newarr.length;i++){
+                    console.log(newarr[i]);
+                    
+                
+                    for(j=0;j<newarr[i].length;j++){
+                        console.log(newarr[i][j].tone_id);
+                        if(newarr[i][j].tone_id == "anger"){
+                            angercount += 1;
+                            angerscores = angerscores + newarr[i][j].score;
+                        }
+                        else if(newarr[i][j].tone_id == "fear"){
+                            fearcount += 1;
+                            fearscores += newarr[i][j].score;
+                        }
+                        else if(newarr[i][j].tone_id == "joy"){
+                            joycount += 1;
+                            joyscores += newarr[i][j].score;
+                        }
+                        else if(newarr[i][j].tone_id == "sadness"){
+                            sadnesscount += 1;
+                            sadnessscores += newarr[i][j].score;
+                        }
+                        else if(newarr[i][j].tone_id == "analytical"){
+                            analyticalcount += 1;
+                            analyticalscores += newarr[i][j].score;
+                        }
+                        else if(newarr[i][j].tone_id == "confident"){
+                            confidentcount += 1;
+                            confidentscores += newarr[i][j].score;
+                            
 
-       $scope.getResponse = function () {
-           $http.get("/tone").then(function(data){
-               console.log(data);
-           });   
-        };
+                        }
+                        else if(newarr[i].tone_id == "tentative"){
+                            tentativecount += 1;
+                            tentativescores += newarr[i][j].score;
 
-           }]);
+                        }
+
+                    }
+
+                    angerscores = angerscores/angercount;
+                    joyscores = joyscores/joycount;
+                    fearscores = fearscores/fearcount;
+                    analyticalscores = analyticalscores/analyticalcount;
+                    sadnessscores = sadnessscores/sadnesscount;
+                    confidentscores = confidentscores/confidentcount;
+                    tentativescores = tentativescores/tentativecount;
+                    console.log(sadnesscount);
+                    tonescores = [angerscores,joyscores,fearscores,analyticalscores,sadnessscores,confidentscores,tentativescores];
+                    console.log(tonescores);
+                    var tonecanvas = document.getElementById('tonecanvas'),
+                    ctx3 = tonecanvas.getContext('2d'),
+                    newdata = {
+                        labels: ["Anger", "Joy", "Fear", "Analytical", "Sadness","Confident","Tentative"],
+                        datasets: [
+                            {   
+                                fillColor: "rgba(66,66,66,0.5)",
+                                strokeColor: "#000000",
+                                pointColor: "rgba(0,0,0,1)",
+                                pointStrokeColor: "#fff",
+                                data: tonescores
+                            }
+                        ]
+                    };
+
+                    var tweetChart = new Chart(ctx3).Bar(newdata, {animationSteps: 50});
+         
+
+
+
+                   
+                }
+                // $scope.chartdata = data;
+
+             
+
+           });
+
+ 
+       
+}]);
+
+// app.controller("tone-ctrl", ["$scope", "$http", function ($scope, $http) {
+//     $scope.newtitle = "Tonal Analysis";
+
+//            $http.get("/tone").then(function(data){
+//                $scope.chartdata = data;
+//            });   
+
+//            }]);
 
